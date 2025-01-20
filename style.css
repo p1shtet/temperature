@@ -1,0 +1,111 @@
+body {
+    font-family: 'Roboto', sans-serif; /* Изменили шрифт */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #4a90e2, #63b3ed); /* Градиентный фон */
+    color: #333; /* Изменили цвет текста */
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* Прозрачный фон */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.3s ease; /* Анимация трансформации */
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+.classroom-container {
+    display: flex;
+    justify-content: center; /* Изменили для центрирования */
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.classroom {
+    background-color: #ecf0f1;
+    padding: 25px;
+    border-radius: 10px;
+    width: 220px;
+    margin: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    cursor: pointer; /* Меняем курсор */
+}
+
+.classroom:hover {
+    transform: translateY(-5px);
+}
+
+.classroom h2 {
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+.temperature {
+    font-size: 2em; /* Увеличили размер шрифта */
+    font-weight: bold;
+    color: #e74c3c; /* Изменили цвет температуры */
+    transition: color 0.3s ease; /* Анимация изменения цвета */
+}
+.classroom:hover .temperature{
+    color: #c0392b;
+}
+
+
+button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    background-color: #3498db; /* Изменили цвет кнопки */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Анимация для начальной загрузки */
+.classroom {
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+.classroom:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.classroom:nth-child(3) {
+     animation-delay: 0.4s;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
