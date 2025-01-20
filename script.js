@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Функция для генерации случайной температуры в заданном диапазоне
     function generateRandomTemperature() {
-        const min = 18;
-        const max = 28;
+        const min = 21,8;
+        const max = 21,9;
         return (Math.random() * (max - min) + min).toFixed(1);
     }
 
