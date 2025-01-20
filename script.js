@@ -4,18 +4,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const temp302Element = document.getElementById('temp302');
     const refreshButton = document.getElementById('refreshButton');
 
-      // Функция для генерации начальной температуры в диапазоне 21.8-22.0
-      function generateInitialTemperature() {
-          return (Math.random() * 0.2 + 21.8).toFixed(1);
-      }
-    // Функция для генерации начальной температуры в диапазоне 21.9-22.2 для 302 кабинета
-     function generateInitialTemperature302() {
-          return (Math.random() * 0.3 + 21.9).toFixed(1);
-      }
+    let canUpdate = false; // Флаг, разрешающий обновление
+    let lastUpdateTime = 0; // Время последнего обновления
 
-      // Функция для изменения температуры
-        function adjustTemperature(currentTemp, is302, otherTemp1, otherTemp2) {
-        const changeProbability = 0.15;
+    // Функция для генерации начальной температуры в диапазоне 21.8-22.0
+    function generateInitialTemperature() {
+        return (Math.random() * 0.2 + 21.8).toFixed(1);
+    }
+
+    // Функция для генерации начальной температуры в диапазоне 21.9-22.2 для 302 кабинета
+    function generateInitialTemperature302() {
+        return (Math.random() * 0.3 + 21.9).toFixed(1);
+    }
+
+
+    // Функция для изменения температуры
+     function adjustTemperature(currentTemp, is302, otherTemp1, otherTemp2) {
+         const changeProbability = 0.15;
         const maxChange = 0.1;
         let minTemp = is302 ? 21.9 : 21.8;
         let maxTemp = is302 ? 22.2 : 22.0;
@@ -38,28 +43,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
               }
 
-
         if (newTemp < minTemp) {
             newTemp = minTemp;
         } else if (newTemp > maxTemp) {
               newTemp = maxTemp;
         }
-
          return newTemp.toFixed(1);
     }
 
 
 
-
-      // Функция для обновления температуры
+    // Функция для обновления температуры
       function updateTemperatures() {
-            const temp203 = temp203Element.textContent.slice(0, 4);
-            const temp202 = temp202Element.textContent.slice(0, 4);
+        if (canUpdate) {
+             const temp203 = temp203Element.textContent.slice(0, 4);
+             const temp202 = temp202Element.textContent.slice(0, 4);
 
-          temp203Element.textContent = adjustTemperature(temp203, false, 0, 0) + ' °C';
-          temp202Element.textContent = adjustTemperature(temp202, false, 0, 0) + ' °C';
-          temp302Element.textContent = adjustTemperature(temp302Element.textContent.slice(0,4), true, temp203Element.textContent.slice(0, 4) , temp202Element.textContent.slice(0, 4)) + ' °C';
-        // Добавим небольшую анимацию при обновлении
+            temp203Element.textContent = adjustTemperature(temp203, false, 0, 0) + ' °C';
+            temp202Element.textContent = adjustTemperature(temp202, false, 0, 0) + ' °C';
+            temp302Element.textContent = adjustTemperature(temp302Element.textContent.slice(0,4), true, temp203Element.textContent.slice(0, 4) , temp202Element.textContent.slice(0, 4)) + ' °C';
+
+               // Добавим небольшую анимацию при обновлении
            temp203Element.style.transition = 'transform 0.2s ease';
           temp203Element.style.transform = 'scale(1.1)';
           setTimeout(() => {
@@ -81,14 +85,37 @@ document.addEventListener('DOMContentLoaded', function() {
             temp302Element.style.transform = 'scale(1)';
              temp302Element.style.transition = 'transform 0.2s ease';
           }, 200);
-      }
+
+            canUpdate = false; // Блокируем повторное обновление
+            refreshButton.disabled = true; // Блокируем кнопку
+
+            lastUpdateTime = Date.now(); // Фиксируем время обновления
+
+            setTimeout(() => {
+              canUpdate = true; // Разрешаем обновление через 15 секунд
+                 refreshButton.disabled = false; // Разблокируем кнопку
+          }, 15000);
+
+        }
+    }
 
 
-      // Устанавливаем начальную температуру при загрузке страницы
+    // Устанавливаем начальную температуру при загрузке страницы
       temp203Element.textContent = generateInitialTemperature() + ' °C';
-      temp202Element.textContent = generateInitialTemperature() + ' °C';
-      temp302Element.textContent = generateInitialTemperature302() + ' °C';
+        temp202Element.textContent = generateInitialTemperature() + ' °C';
+       temp302Element.textContent = generateInitialTemperature302() + ' °C';
+
+    // Изначально разрешаем обновление
+      canUpdate = true;
+
+     // Устанавливаем начальную блокировку на 15 секунд
+      refreshButton.disabled = true;
+      setTimeout(() => {
+          refreshButton.disabled = false;
+          lastUpdateTime = Date.now();
+    }, 15000);
 
     // Добавляем обработчик события на кнопку "Обновить"
     refreshButton.addEventListener('click', updateTemperatures);
+
 });
